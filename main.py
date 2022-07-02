@@ -20,18 +20,17 @@ pd = mdb.pd
 print("done\n")
 
 print("Loading DB Data...")
-# workingDir = os.path.dirname(os.path.abspath(__file__))
-# conn = pyodbc.connect(r'Driver=Microsoft Access Driver (*.mdb, *.accdb); ;DBQ=' + os.path.join(workingDir, "SAPARC_Python.accdb"))
-dbFilename = "SAPARC_Python.accdb"
+dataDBFilePath = "database/data.accdb"
+metadataDBFilePath = "database/metadata.accdb"
 # df_tbl_ExamMark_G = pd.read_sql( "select * from tbl_ExamMark_G", conn)
 # df_tbl_ExamMark_P = pd.read_sql( "select * from tbl_ExamMark_P", conn)
 # df_tbl_ExamMark_S = pd.read_sql( "select * from tbl_ExamMark_S", conn)
-# TODO: til here
 # df_clist_Subject = pd.read_sql( "select * from clist_subject", conn)
-# df_tbl_ExamMark_G = mdb.read_table(dbFilename, "tbl_ExamMark_G", dtype={ 'GradeDSEPoint': 'Float64' })
-# df_tbl_ExamMark_P = mdb.read_table(dbFilename, "tbl_ExamMark_P", low_memory=False)
-# df_tbl_ExamMark_S = mdb.read_table(dbFilename, "tbl_ExamMark_S")
-df_clist_Subject = mdb.read_table(dbFilename, "clist_subject")
+# TODO: til here
+df_tbl_ExamMark_G = mdb.read_table(dataDBFilePath, "tbl_ExamMark_G", dtype={ 'GradeDSEPoint': 'Float64' })
+df_tbl_ExamMark_P = mdb.read_table(dataDBFilePath, "tbl_ExamMark_P", low_memory=False)
+df_tbl_ExamMark_S = mdb.read_table(dataDBFilePath, "tbl_ExamMark_S")
+df_clist_Subject = mdb.read_table(dataDBFilePath, "clist_subject")
 
 print(df_tbl_ExamMark_G)
 print(df_tbl_ExamMark_P)

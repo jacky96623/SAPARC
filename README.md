@@ -2,6 +2,15 @@
 
 This README describes details for the SAPARC (Raimondi College Student Academic Performance Analysis) program.
 
+## Directory Structure
+
+    .
+    ├── database                # Microsoft Access database files
+    │   ├── data.accdb          # Database storing actual score data
+    │   └── metadata.accdb      # Database storing metadata e.g. subject info
+    ├── main.py                 # Main program
+    └── README.md               # Documentations
+
 ## Pre-requisites
 
 1. python (Developed with 3.9.13)
