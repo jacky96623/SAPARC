@@ -15,7 +15,7 @@ This README describes details for the SAPARC (Raimondi College Student Academic 
 
 1. python (Developed with 3.9.13)
 2. mdbtools (See [GitHub](https://github.com/mdbtools/mdbtools#installation) for installation guide)
-3. unixodbc-dev (Deprecated?)
+<!-- REVIEW: 3. unixodbc-dev -->
 
 ## Database Schemata
 
@@ -30,7 +30,7 @@ This README describes details for the SAPARC (Raimondi College Student Academic 
 | MarkG         |           |           |
 | CForm         |           |           |
 | CName         |           |           |
-| GradePass     |           |           |
+| GradePass     | Boolean   |           |
 | GradePriority |           |           |
 | GradeType     |           |           |
 | YCodeSel      |           |           |
@@ -160,7 +160,7 @@ This README describes details for the SAPARC (Raimondi College Student Academic 
 | YCode       |           |           |
 | JCode       |           |           |
 | ACode       |           |           |
-| MarkS       |           |           |
+| MarkS       | Float64   |           |
 | CForm       |           |           |
 | CName       |           |           |
 | YCodeSel    |           |           |
@@ -168,30 +168,19 @@ This README describes details for the SAPARC (Raimondi College Student Academic 
 | CNameSel    |           |           |
 | SCodeRep    |           |           |
 
-### clist_subject
+### CList_Subject
 
-| Column Name   | Data Type | Nullable? |
-| ------------- | --------- | --------- |
-| SCode         |           |           |
-| YCode         |           |           |
-| JCode         |           |           |
-| ACode         |           |           |
-| MarkG         |           |           |
-| CForm         |           |           |
-| CName         |           |           |
-| GradePass     |           |           |
-| GradePriority |           |           |
-| GradeType     |           |           |
-| YCodeSel      |           |           |
-| CFormSel      |           |           |
-| CNameSel      |           |           |
-| GradeDSEPoint | Float64   | True      |
-| SCodeRep      |           |           |
+| Column Name | Data Type | Nullable? |
+| ----------- | --------- | --------- |
+| JCode       |           |           |
+| JNameC      |           |           |
+| JNameE      |           |           |
+| JO          | Int64     | True      |
+| JSubPaper   |           |           |
+| jDSEJCode   |           |           |
 
 ## Guide
 
 1. Install python packages:
 
-   ```sh
-   pip install -r requirements.txt
-   ```
+   `pip install -r requirements.txt`
