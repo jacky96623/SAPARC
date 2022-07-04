@@ -11,11 +11,21 @@ This README describes details for the SAPARC (Raimondi College Student Academic 
     ├── main.py                 # Main program
     └── README.md               # Documentations
 
-## Pre-requisites
+## Pre-requisites for MacOS
 
-1. python (Developed with 3.9.13)
-2. mdbtools (See [GitHub](https://github.com/mdbtools/mdbtools#installation) for installation guide)
-<!-- REVIEW: 3. unixodbc-dev -->
+1. Homebrew
+    - See First Step in <https://pythonviz.com/basic/install-python3-macos-homebrew/> for installation guide
+2. python3
+    - Suggested Minimum Version: 3.9.13
+    - See Second Step in <https://pythonviz.com/basic/install-python3-macos-homebrew/> for installation guide
+3. mdbtools
+    - See <https://github.com/mdbtools/mdbtools#installation> for installation guide
+
+## General Pre-requisites
+
+1. Python packages
+    - Run `pip install -r requirements.txt` to install all required packages
+    - Run `pip list` to check if the packages are installed
 
 ## Database Schemata
 
