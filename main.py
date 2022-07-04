@@ -13,8 +13,6 @@ import pandas as pd
 from os import path
 import pandas_access as mdb
 import numpy as np
-# from scipy.stats import stats
-# import math
 
 print("done\n")
 
@@ -35,7 +33,6 @@ dfCListSubject: pd.DataFrame = mdb.read_table(metadataDBFilePath, "CList_Subject
 
 # REVIEW: why need to delete old data?
 # cursor=conn.cursor()
-# cursor.execute( "delete * from tbl_ExamMark_Rank")
 # cursor.execute( "delete * from tbl_ExamStat_STierAll_Pivot")
 # cursor.execute( "delete * from tbl_ExamMark_DSE_In")
 # cursor.execute( "delete * from tbl_ExamMark_DSE_In_Corr")
@@ -50,10 +47,9 @@ print("done\n")
 print("Analyzing Data...")
 
 for i in range(6):
-    # print("****************************************")
+    # print("\n*************************************")
     print(f" --- Calculation Process {i + 1} ---")
-    # print("****************************************")
-    # print(" ")
+    # print("*************************************\n")
 
     runsql = 1
 
@@ -436,12 +432,14 @@ for i in range(6):
             "GradePriorityIn", "GradeTypeIn", "GradeDSEPointIn", "MarkS", "Z-Score"
         ])
 
-        dfDSEInCorrGG = dfDSEIn.groupby(
-            ["JCode", "ACodeDSE", "ACodeIn"]
-        ).apply(lambda dfDSEIn: dfDSEIn["GradeDSEPoint"].corr(dfDSEIn["GradeDSEPointIn"]))
-        dfDSEInCorrSG = dfDSEIn.groupby(
-            ["JCode", "ACodeDSE", "ACodeIn"]
-        ).apply(lambda dfDSEIn: dfDSEIn["GradeDSEPoint"].corr(dfDSEIn["MarkS"]))
+        dfDSEInCorrGG = dfDSEIn.groupby(["JCode", "ACodeDSE", "ACodeIn"]).apply(
+            lambda dfDSEInGp: dfDSEInGp["GradeDSEPoint"].astype('float64').corr(
+                dfDSEInGp["GradeDSEPointIn"].astype('float64')
+            )
+        )
+        dfDSEInCorrSG = dfDSEIn.groupby(["JCode", "ACodeDSE", "ACodeIn"]).apply(
+            lambda dfDSEInGp: dfDSEInGp["GradeDSEPoint"].astype('float64').corr(dfDSEInGp["MarkS"].astype('float64'))
+        )
 
         dfOutput2 = pd.DataFrame(dfDSEInCorrGG)
         dfOutput2 = dfOutput2.fillna(np.nan).replace([np.nan], [None])
@@ -466,85 +464,75 @@ for i in range(6):
     elif i > 6:
         break
 
-    print("****************************************")
-    print(f" --- Round The Numbers {i + 1} ---")
-    print("****************************************")
-    print(" ")
+    # # print("*************************************")
+    # # print(f" --- Round The Numbers {i + 1} ---")
+    # # print("*************************************")
+    # # print(" ")
+    # print(" --- Round The Numbers ---")
 
-    """
-    pyodbc and Access DB Connection - Python Marketer
-    https://pythonmarketer.com/2019/11/30/inserting-new-records-into-a-microsoft-access-database-with-python/ 
-    """
-    def df_to_access(x):
-        """
-        use list comprehension to format df rows as a list of tuples. 
-        rows = [("email@gmail.com", "2019-12-04","Clean"),("email2@gmail.com", "2019-12-01","Junk")] 
-        """
-        df_2_a = x.round(decimals=4)
-        "df_2_a = df_2_a.replace(np.nan, "" , regex=True)"
-        "df_2_a.fillna("")"
-        rows = [tuple(cell) for cell in df_2_a.values]
-        return rows
+    # REVIEW: need to save to DB?
+    # """
+    # pyodbc and Access DB Connection - Python Marketer
+    # https://pythonmarketer.com/2019/11/30/inserting-new-records-into-a-microsoft-access-database-with-python/ 
+    # """
+    # def df_to_access(x):
+    #     """
+    #     use list comprehension to format df rows as a list of tuples. 
+    #     rows = [("email@gmail.com", "2019-12-04","Clean"),("email2@gmail.com", "2019-12-01","Junk")] 
+    #     """
+    #     df_2_a = x.round(decimals=4)
+    #     "df_2_a = df_2_a.replace(np.nan, "" , regex=True)"
+    #     "df_2_a.fillna("")"
+    #     rows = [tuple(cell) for cell in df_2_a.values]
+    #     return rows
 
-    print("****************************************")
-    print("Save to Database (accdb) ---  " + str(x) + "  ---")
-    print("****************************************")
-    print(" ")
+    # # print("*************************************")
+    # # print(f" --- Save to Database (accdb) {i + 1} --- ")
+    # # print("*************************************")
+    # # print(" ")
+    # print(" --- Save to Database --- ")
 
-    conn1 = pyodbc.connect(
-        r"Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=D:\LamPatrick\Teaching\Software New\Python\SAPARC_Python.accdb;")
-    cursor = conn1.cursor()
+    # conn1 = pyodbc.connect(
+    #     r"Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=D:\LamPatrick\Teaching\Software New\Python\SAPARC_Python.accdb;")
+    # cursor = conn1.cursor()
 
-    if i == 0 and not dfExamMarkS.empty:
+    # if i == 0 and not dfExamMarkS.empty:
+    #     sql = "INSERT INTO tbl_ExamStat_STierAll_Pivot (YCode,JCode,ACode,CForm,Freq,Max,Avg, Median, Min ,SD,Variance,PassFreq,[Pass%],Skewness) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+    #     sql2 = "INSERT INTO tbl_ExamStat_STierAll_Pivot (YCode,JCode,ACode,CForm,CName,SCode,YCodeSel,CFormSel,CNameSel,[Z-Score],Rank,Rankpc) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+    #     sql3 = "INSERT INTO tbl_ExamStat_MarkRange (YCode,JCode,ACode,CForm,SCForm,MarkRange,MarkRangeFreqSum) VALUES (?,?,?,?,?,?,?)"
+    # elif i == 1 and not dfExamMarkS.empty:
+    #     sql = "INSERT INTO tbl_ExamStat_STierAll_Pivot (YCode,JCode,ACode,CForm,CName,Freq,Max,Avg, Median, Min ,SD,Variance,PassFreq,[Pass%],Skewness) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+    # elif i == 2 and not dfExamMarkS.empty:
+    #     sql = "INSERT INTO tbl_ExamStat_STierAll_Pivot (YCodeSel,JCode,ACode,CFormSel,Freq,Max,Avg, Median, Min ,SD,Variance,PassFreq,[Pass%],Skewness) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+    #     sql2 = "INSERT INTO tbl_ExamStat_STierAll_Pivot (YCode,JCode,ACode,CForm,CName,SCode,YCodeSel,CFormSel,CNameSel,[Z-Score]) VALUES (?,?,?,?,?,?,?,?,?,?)"
+    # elif i == 3 and not dfExamMarkS.empty:
+    #     sql = "INSERT INTO tbl_ExamStat_STierAll_Pivot (YCodeSel,JCode,ACode,CFormSel,CNameSel,Freq,Max,Avg, Median, Min ,SD,Variance,PassFreq,[Pass%],Skewness) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+    # elif i == 4:
+    #     sql = "Insert Into tbl_ExamStat_STierAll_Pivot (YCode,ACode,SCode,CForm,CName,YCodeSel,CFormSel,CNameSel,Best6,Best5,4C2X,4C1X,[332233+],[33222+],[3322+],[22222+],[332222+],[33224+],[332244+]) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+    # elif i == 5 and not dfExamMarkS.empty and not dfExamMarkG.empty:
+    #     sql = "Insert Into tbl_ExamMark_DSE_In (SCode,YCodeDSE,JCode,ACodeDSE,MarkDSE,CFormDSE,CNameDSE,GradePass,GradePriority,GradeType,GradeDSEPoint,YCodeIn,ACodeIn,MarkG,CFormIn,CNameIn,GradePassIn,GradePriorityIn,GradeTypeIn,GradeDSEPointIn,MarkS,[Z-Score]) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+    #     sql2 = "Insert Into tbl_ExamMark_DSE_In_Corr(JCode,ACodeDSE,ACodeIn,DSEInCorrR,MarkType) VALUES (?,?,?,?,?)"
+    #     sql3 = "Insert Into tbl_ExamMark_DSE_In_Corr(JCode,ACodeDSE,ACodeIn,DSEInCorrR,MarkType) VALUES (?,?,?,?,?)"
 
-        sql = """ INSERT INTO tbl_ExamStat_STierAll_Pivot (YCode,JCode,ACode,CForm,Freq,Max,Avg, Median, Min ,SD,Variance,PassFreq,[Pass%],Skewness) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?) """
-        sql2 = """ INSERT INTO tbl_ExamStat_STierAll_Pivot (YCode,JCode,ACode,CForm,CName,SCode,YCodeSel,CFormSel,CNameSel,[Z-Score],Rank,Rankpc) VALUES(?,?,?,?,?,?,?,?,?,?,?,?) """
-        sql3 = """ INSERT INTO tbl_ExamStat_MarkRange (YCode,JCode,ACode,CForm,SCForm,MarkRange,MarkRangeFreqSum) VALUES(?,?,?,?,?,?,?) """
+    # if (0 <= i and i <= 3 and not dfExamMarkS.empty) or (i == 4) or (i == 5 and not dfExamMarkS.empty and not dfExamMarkG.empty and not dfExamMarkG[dfExamMarkG["ACode"].str[-5:] == "HKDSE"].empty):
+    #     for runsqlx in range(runsql):
+    #         if runsqlx == 0:
+    #             d2acursor = dfOutput1
+    #             sqlcursor = sql
+    #         elif runsqlx == 1:
+    #             d2acursor = dfOutput2
+    #             sqlcursor = sql2
+    #         elif runsqlx == 2:
+    #             d2acursor = dfOutput3
+    #             sqlcursor = sql3
 
-    elif i == 1 and not dfExamMarkS.empty:
-
-        sql = """ INSERT INTO tbl_ExamStat_STierAll_Pivot (YCode,JCode,ACode,CForm,CName,Freq,Max,Avg, Median, Min ,SD,Variance,PassFreq,[Pass%],Skewness) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) """
-
-    elif i == 2 and not dfExamMarkS.empty:
-
-        sql = """ INSERT INTO tbl_ExamStat_STierAll_Pivot (YCodeSel,JCode,ACode,CFormSel,Freq,Max,Avg, Median, Min ,SD,Variance,PassFreq,[Pass%],Skewness) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?) """
-        sql2 = """ INSERT INTO tbl_ExamStat_STierAll_Pivot (YCode,JCode,ACode,CForm,CName,SCode,YCodeSel,CFormSel,CNameSel,[Z-Score]) VALUES(?,?,?,?,?,?,?,?,?,?) """
-
-    elif i == 3 and not dfExamMarkS.empty:
-
-        sql = """ INSERT INTO tbl_ExamStat_STierAll_Pivot (YCodeSel,JCode,ACode,CFormSel,CNameSel,Freq,Max,Avg, Median, Min ,SD,Variance,PassFreq,[Pass%],Skewness) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) """
-
-    elif i == 4 and (not(dfExamMarkS.empty) or dfExamMarkS.empty):
-
-        sql = """ Insert Into tbl_ExamStat_STierAll_Pivot(YCode,ACode,SCode,CForm,CName,YCodeSel,CFormSel,CNameSel,Best6,Best5,4C2X,4C1X,[332233+],[33222+],[3322+],[22222+],[332222+],[33224+],[332244+]) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) """
-
-    elif i == 5 and not dfExamMarkS.empty and not dfExamMarkG.empty:
-
-        sql = """ Insert Into tbl_ExamMark_DSE_In(SCode,YCodeDSE,JCode,ACodeDSE,MarkDSE,CFormDSE,CNameDSE,GradePass,GradePriority,GradeType,GradeDSEPoint,YCodeIn,ACodeIn,MarkG,CFormIn,CNameIn,GradePassIn,GradePriorityIn,GradeTypeIn,GradeDSEPointIn,MarkS,[Z-Score]) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) """
-        sql2 = """ Insert Into tbl_ExamMark_DSE_In_Corr(JCode,ACodeDSE,ACodeIn,DSEInCorrR,MarkType) VALUES (?,?,?,?,?) """
-        sql3 = """ Insert Into tbl_ExamMark_DSE_In_Corr(JCode,ACodeDSE,ACodeIn,DSEInCorrR,MarkType) VALUES (?,?,?,?,?) """
-
-    if ((0 <= x <= 3 and not dfExamMarkS.empty) or (i == 4) or (i == 5 and not dfExamMarkS.empty and not dfExamMarkG.empty) and not (dfExamMarkG[dfExamMarkG["ACode"].str[-5:] == "HKDSE"].empty)):
-        for runsqlx in range(runsql):
-
-            if runsqli == 0:
-                d2acursor = dfOutput1
-                sqlcursor = sql
-            elif runsqli == 1:
-                d2acursor = dfOutput2
-                sqlcursor = sql2
-            elif runsqli == 2:
-                d2acursor = dfOutput3
-                sqlcursor = sql3
-
-            rows = df_to_access(d2acursor)
-            row_in_check = 1
-            for row in rows:
-                if (row_in_check == 1) or (row_in_check % (10**int(math.log(row_in_check, 10))) == 0):
-                    print("Saving Record  #" + str(row_in_check))
-                    print(row)
-                row_in_check = row_in_check + 1
-                conn1.execute(sqlcursor, row)
-                conn1.commit()
-
-    conn1.close()
+    #         rows = df_to_access(d2acursor)
+    #         row_in_check = 1
+    #         for row in rows:
+    #             if (row_in_check == 1) or (row_in_check % (10**int(np.math.log(row_in_check, 10))) == 0):
+    #                 print("Saving Record  #" + str(row_in_check))
+    #                 print(row)
+    #             row_in_check = row_in_check + 1
+    #             conn1.execute(sqlcursor, row)
+    #             conn1.commit()
+    # conn1.close()
